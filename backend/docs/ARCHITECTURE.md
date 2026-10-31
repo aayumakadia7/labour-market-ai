@@ -34,23 +34,17 @@ The codebase is organized into high-level domain headings for scalability, maint
 │       ├── App.tsx               # Root Application Canvas
 │       └── main.tsx              # DOM Hydration Entry Point
 │
-├── backend/                      # Backend & Express Microservices
-│   ├── routes/                   # REST API Endpoints (/telemetry, /briefs, /models)
-│   ├── services/                 # Hugging Face AI & Telemetry Services
-│   └── server.ts                 # Express Application Server
-│
-├── api/                          # Vercel Serverless Edge Functions
-│   ├── index.ts                  # Main Serverless Dispatcher
-│   ├── health.ts                 # Health Check Endpoint
-│   ├── telemetry.ts              # National Aggregates Endpoint
-│   └── models.ts                 # Hugging Face Model Inference Endpoint
-│
-├── scripts/                      # ML Pipelines & Model Fine-Tuning
-│   ├── train_lmis_model.py       # Hugging Face PEFT LoRA Fine-Tuning Script
-│   └── prepare_dataset.py        # LMIS Dataset Formatting Script
-│
-└── docs/                         # System Documentation
-    ├── ARCHITECTURE.md           # Project Directory Blueprint
-    ├── VERCEL_DEPLOYMENT.md      # Vercel Cloud Hosting Manual
-    └── HUGGINGFACE_TRAINING.md   # Hugging Face Fine-Tuning Guide
+└── backend/                      # Dual-Runtime Backend (Express & FastAPI)
+    ├── ai/                       # ML Models, Pipelines, Training & Prompts
+    ├── api/                      # Edge Functions & Serverless Handlers
+    ├── database/                 # PostgreSQL + TimescaleDB Schemas & Seeds
+    ├── docs/                     # System & Deployment Architecture Docs
+    ├── routes/                   # REST API Endpoints (/telemetry, /briefs, /models)
+    ├── scripts/                  # ML Pipelines & Model Fine-Tuning Scripts
+    ├── services/                 # Hugging Face AI & Telemetry Services
+    ├── config.py                 # FastAPI Configuration & Settings
+    ├── main.py                   # FastAPI Analytical Application Entry Point
+    ├── server.ts                 # Express Application Gateway Server
+    ├── package.json              # Backend Node.js Package Configuration
+    └── tsconfig.json             # Backend TypeScript Configuration
 ```
