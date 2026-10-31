@@ -113,27 +113,44 @@ The LMIS 2.0 includes a fully functional, demonstrable **AI Policy Copilot** acc
 
 ---
 
+## 📁 Clean Repository Structure
+
+The project is structured into two core directories:
+
+`
+labour-market-ai/
+├── frontend/                     # React 19 + TypeScript + Vite + Tailwind CSS SPA
+│   ├── src/                      # UI components, stores, hooks, types, datasets
+│   ├── index.html                # Vite HTML entry point
+│   ├── package.json              # Frontend dependencies and build scripts
+│   ├── vite.config.ts            # Vite configuration and path aliases
+│   ├── tsconfig.json             # TypeScript configuration for frontend
+│   └── vercel.json               # Vercel deployment configuration
+│
+└── backend/                      # Dual-runtime backend (Node.js/Express + Python/FastAPI)
+    ├── ai/                       # ML pipelines, evaluations, prompts, training
+    ├── api/                      # Serverless API routes and edge functions
+    ├── database/                 # PostgreSQL + TimescaleDB schemas, seeds, queries
+    ├── docs/                     # Architecture, Hugging Face training, deployment docs
+    ├── routes/                   # Express domain routes (telemetry, models, briefs, alerts)
+    ├── scripts/                  # Data preparation and LoRA fine-tuning scripts
+    ├── services/                 # Hugging Face inference and cryptography services
+    ├── config.py                 # FastAPI Pydantic configuration settings
+    ├── main.py                   # FastAPI application entry point
+    ├── requirements.txt          # Python dependencies
+    ├── server.ts                 # Express TypeScript server entry point
+    ├── package.json              # Node.js backend dependencies and scripts
+    └── tsconfig.json             # TypeScript configuration for backend
+`
+
+---
+
 ## 🛠️ Full-Stack Backend Architecture
 
-LMIS 2.0 includes an Express TypeScript backend mounted cleanly alongside Vite:
+LMIS 2.0 features a hybrid dual-runtime backend located inside ackend/:
+- **Express TypeScript Gateway (ackend/server.ts)**: Real-time telemetry, WebSocket/SSE streaming, and statutory dispatches.
+- **FastAPI Analytical Engine (ackend/main.py)**: Asynchronous microservices, TimescaleDB queries, and AI model inference.
 
-```
-├── backend/
-│   ├── routes/
-│   │   ├── telemetry.routes.ts   # National KPIs and cross-sector aggregates
-│   │   ├── models.routes.ts      # AI inference, fine-tuning jobs & Copilot API
-│   │   └── briefs.routes.ts      # Cabinet note dispatch and template library
-│   ├── services/
-│   │   └── huggingface.service.ts # Hugging Face Model Hub integration
-│   └── server.ts                 # Express entry point
-├── scripts/
-│   ├── prepare_dataset.py        # LMIS instruction fine-tuning dataset generator
-│   └── train_lmis_model.py       # PyTorch/Transformers training pipeline
-└── docs/
-    ├── ARCHITECTURE.md           # System blueprint & data flow diagrams
-    ├── HUGGINGFACE_TRAINING.md   # Model fine-tuning & evaluation instructions
-    └── VERCEL_DEPLOYMENT.md      # Cloud deployment guidelines
-```
 
 ### Mounted API Endpoints:
 | Method | Endpoint | Description |
@@ -169,29 +186,33 @@ Generates structured JSONL training datasets with instruction-input-output pairs
 
 ### Prerequisites
 - Node.js 18+ or 20+
-- npm or bun
+- Python 3.10+
+- npm, pnpm, or bun
 
-### Installation
-```bash
-# Clone the repository
-git clone https://github.com/msde-goi/lmis-command-center.git
-cd lmis-command-center
-
-# Install dependencies
+### 1. Running the Frontend
+`ash
+cd frontend
 npm install
-
-# Start the full-stack development server on port 3000
 npm run dev
-```
+`
+The React frontend dashboard starts at http://localhost:3000.
 
-### Verification & Testing
-```bash
-# Validate TypeScript syntax and build production bundle
-npm run build
+### 2. Running the Backend
 
-# Run ESLint validation
-npm run lint
-```
+#### Option A: Express TypeScript Gateway (Node.js)
+`ash
+cd backend
+npm install
+npm run dev
+`
+
+#### Option B: FastAPI Analytical Engine (Python)
+`ash
+cd backend
+pip install -r requirements.txt
+python main.py
+`
+
 
 ---
 

@@ -10,7 +10,10 @@ from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, StreamingResponse
 
-from backend.config import settings
+try:
+    from backend.config import settings
+except ImportError:
+    from config import settings
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -119,4 +122,4 @@ async def copilot_chat(request: Request):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("backend.main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
