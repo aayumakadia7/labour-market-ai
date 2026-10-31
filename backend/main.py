@@ -19,17 +19,17 @@ _PARENT_DIR = os.path.dirname(_CURRENT_DIR)
 if _PARENT_DIR not in sys.path:
     sys.path.insert(0, _PARENT_DIR)
 
-from fastapi import FastAPI, Request
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse
+from fastapi import FastAPI, Request  # type: ignore
+from fastapi.middleware.cors import CORSMiddleware  # type: ignore
+from fastapi.responses import StreamingResponse  # type: ignore
 
 try:
-    from config import settings
+    from config import settings  # type: ignore
 except ImportError:
     try:
-        from .config import settings
+        from .config import settings  # type: ignore
     except ImportError:
-        from backend.config import settings
+        from backend.config import settings  # type: ignore
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
