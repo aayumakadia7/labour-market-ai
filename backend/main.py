@@ -4,16 +4,32 @@ FastAPI Backend Engine • Ministry of Skill Development & Entrepreneurship (MSD
 Government of India
 """
 
+import asyncio
+import os
+import sys
 import time
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, Request, status
+
+# Ensure backend directory and parent directory are on sys.path
+_CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+if _CURRENT_DIR not in sys.path:
+    sys.path.insert(0, _CURRENT_DIR)
+
+_PARENT_DIR = os.path.dirname(_CURRENT_DIR)
+if _PARENT_DIR not in sys.path:
+    sys.path.insert(0, _PARENT_DIR)
+
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse, StreamingResponse
+from fastapi.responses import StreamingResponse
 
 try:
-    from backend.config import settings
-except ImportError:
     from config import settings
+except ImportError:
+    try:
+        from .config import settings
+    except ImportError:
+        from backend.config import settings
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -96,14 +112,17 @@ async def copilot_chat(request: Request):
     Streaming AI Policy Copilot endpoint grounded in NCVET qualification packs,
     PLFS microdata, and statutory Cabinet mandates.
     """
-    body = await request.json()
+    try:
+        body = await request.json()
+    except Exception:
+        body = {}
     prompt = body.get("prompt", "Analyze Pune deficit")
     
     async def token_generator():
         yield f"data: {{\"type\":\"thought\",\"content\":\"Consulting TimescaleDB hypertable for Pune district vacancy signals...\"}}\n\n"
-        time.sleep(0.05)
+        await asyncio.sleep(0.05)
         yield f"data: {{\"type\":\"thought\",\"content\":\"Cross-referencing Automotive SSC QP/NOS standards...\"}}\n\n"
-        time.sleep(0.05)
+        await asyncio.sleep(0.05)
         
         response_text = (
             f"**Policy Executive Summary for:** '{prompt}'\n\n"
@@ -114,7 +133,7 @@ async def copilot_chat(request: Request):
         
         for word in response_text.split(" "):
             yield f"data: {{\"type\":\"token\",\"content\":\"{word} \"}}\n\n"
-            time.sleep(0.03)
+            await asyncio.sleep(0.03)
             
         yield f"data: {{\"type\":\"done\"}}\n\n"
 
@@ -122,4 +141,4 @@ async def copilot_chat(request: Request):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True, app_dir=_CURRENT_DIR)

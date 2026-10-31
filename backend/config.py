@@ -1,5 +1,15 @@
 import os
-from pydantic_settings import BaseSettings
+
+try:
+    from pydantic_settings import BaseSettings
+except ImportError:
+    try:
+        from pydantic import BaseSettings  # type: ignore
+    except ImportError:
+        class BaseSettings:  # type: ignore
+            def __init__(self, **kwargs):
+                for k, v in kwargs.items():
+                    setattr(self, k, v)
 
 class Settings(BaseSettings):
     PROJECT_NAME: str = "LMIS 2.0 National Decision Support Engine"
