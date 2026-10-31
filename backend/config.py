@@ -1,17 +1,15 @@
 import os
 
 try:
-    from pydantic_settings import BaseSettings, SettingsConfigDict
+    from pydantic_settings import BaseSettings  # type: ignore
 except ImportError:
     try:
-        from pydantic import BaseSettings, ConfigDict as SettingsConfigDict  # type: ignore
+        from pydantic import BaseSettings  # type: ignore
     except ImportError:
         class BaseSettings:  # type: ignore
             def __init__(self, **kwargs):
                 for k, v in kwargs.items():
                     setattr(self, k, v)
-        def SettingsConfigDict(**kwargs):  # type: ignore
-            return kwargs
 
 class Settings(BaseSettings):
     PROJECT_NAME: str = "LMIS 2.0 National Decision Support Engine"
@@ -43,6 +41,6 @@ class Settings(BaseSettings):
     NIC_CLEARANCE_REQUIRED: bool = True
     AUDIT_LOG_ENABLED: bool = True
 
-    model_config = SettingsConfigDict(case_sensitive=True, extra="ignore")
+    model_config = {"case_sensitive": True, "extra": "ignore"}
 
 settings = Settings()
