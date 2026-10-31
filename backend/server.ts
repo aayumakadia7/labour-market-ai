@@ -10,7 +10,7 @@ import { officersRouter } from './routes/officers.routes';
 dotenv.config();
 
 export const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 
 // Security and parsing middleware
 app.use(express.json({ limit: '10mb' }));
